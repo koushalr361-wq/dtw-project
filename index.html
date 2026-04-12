@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Exchange Pro</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 Book Exchange Pro</h1>
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+        <input type="text" id="username" placeholder="Enter your name">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- APP -->
+    <div id="app" style="display:none;">
+
+        <p class="welcome">Welcome, <span id="userDisplay"></span> 👋</p>
+
+        <div class="form">
+            <input type="text" id="bookName" placeholder="Book name">
+            <button onclick="addBook()">Add</button>
+        </div>
+
+        <input type="text" id="search" placeholder="🔍 Search books..." onkeyup="searchBooks()">
+
+        <div id="bookList" class="book-list"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
