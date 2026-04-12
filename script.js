@@ -1,89 +1,73 @@
-let currentUser = localStorage.getItem("user");
-let books = JSON.parse(localStorage.getItem("books")) || [];
-
-// AUTO LOGIN
-if (currentUser) {
-    showApp();
-}
-
-// LOGIN FUNCTION
 function login() {
-    let name = document.getElementById("username").value;
-
-    if (name === "") {
-        alert("Enter name");
-        return;
+    let user = document.getElementById("username").value;
+    if(user){
+        localStorage.setItem("user", user);
+        window.location.href = "dashboard.html";
     }
-
-    localStorage.setItem("user", name);
-    currentUser = name;
-    showApp();
 }
 
-function showApp() {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("userDisplay").innerText = currentUser;
-
-    displayBooks();
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
 
-// DISPLAY BOOKS
-function displayBooks(list = books) {
-    let container = document.getElementById("bookList");
-    container.innerHTML = "";
-
-    list.forEach((b, index) => {
-        let div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-            <span>${b.name} (by ${b.user})</span>
-            <div>
-                <button class="request-btn" onclick="requestBook('${b.name}')">Request</button>
-                <button class="delete-btn" onclick="deleteBook(${index})">❌</button>
-            </div>
-        `;
-
-        container.appendChild(div);
-    });
-}
-
-// ADD BOOK
 function addBook() {
     let book = document.getElementById("bookName").value;
+    let books = JSON.parse(localStorage.getItem("books")) || [];
 
-    if (book === "") {
-        alert("Enter book name");
-        return;
-    }
-
-    books.push({ name: book, user: currentUser });
+    books.push(book);
     localStorage.setItem("books", JSON.stringify(books));
 
     displayBooks();
-    document.getElementById("bookName").value = "";
 }
 
-// DELETE
+function displayBooks() {
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+    let list = document.getElementById("bookList");
+
+    if(!list) return;
+
+    list.innerHTML = "";
+
+    books.forEach((b, index) => {
+        list.innerHTML += `
+            <li>
+                ${b}
+                <button onclick="requestBook('${b}')">Request</button>
+                <button onclick="deleteBook(${index})">Delete</button>
+            </li>
+        `;
+    });
+}
+
 function deleteBook(index) {
+    let books = JSON.parse(localStorage.getItem("books"));
     books.splice(index, 1);
     localStorage.setItem("books", JSON.stringify(books));
     displayBooks();
 }
 
-// SEARCH
-function searchBooks() {
-    let search = document.getElementById("search").value.toLowerCase();
+function searchBook() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let items = document.querySelectorAll("#bookList li");
 
-    let filtered = books.filter(b =>
-        b.name.toLowerCase().includes(search)
-    );
-
-    displayBooks(filtered);
+    items.forEach(item => {
+        item.style.display = item.innerText.toLowerCase().includes(input) ? "" : "none";
+    });
 }
 
-// REQUEST (SIMULATED CHAT)
-function requestBook(bookName) {
-    alert("Request sent for: " + bookName + "\\nOwner will be notified!");
+function requestBook(book) {
+    localStorage.setItem("currentBook", book);
+    window.location.href = "chat.html";
+}
+
+function sendMessage() {
+    let msg = document.getElementById("message").value;
+    let chat = document.getElementById("chatBox");
+
+    chat.innerHTML += `<p>${msg}</p>`;
+}
+
+if(window.location.pathname.includes("dashboard.html")) {
+    displayBooks();
 }
