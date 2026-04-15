@@ -3,25 +3,62 @@
 <head>
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
+<button onclick="toggleTheme()">🌗</button>
 </head>
 <body>
 
-<h2>Dashboard</h2>
+<header>
+    <h2>📚 Book Exchange</h2>
+    <button onclick="logout()">Logout</button>
+</header>
 
-<button onclick="logout()">Logout</button>
+<div class="container">
 
-<br><br>
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-box">
+            <h3 id="totalBooks">0</h3>
+            <p>Total Books</p>
+        </div>
+        <div class="stat-box">
+            <h3 id="likedBooks">0</h3>
+            <p>Wishlist ❤️</p>
+        </div>
+        <div class="stat-box">
+            <h3 id="topCategory">-</h3>
+            <p>Top Category</p>
+        </div>
+    </div>
 
-<input type="text" id="bookName" placeholder="Enter book name">
-<button onclick="addBook()">Add Book</button>
+    <!-- FILTERS -->
+    <div class="filters">
+        <button onclick="filterBooks('All')">All</button>
+        <button onclick="filterBooks('Self Help')">Self Help</button>
+        <button onclick="filterBooks('Finance')">Finance</button>
+        <button onclick="filterBooks('Fiction')">Fiction</button>
+    </div>
 
-<br><br>
+    <!-- ADD -->
+    <div class="top-bar">
+        <input type="text" id="bookName" placeholder="Book name">
+        <input type="text" id="bookImg" placeholder="Image URL">
+        <select id="category">
+            <option>Self Help</option>
+            <option>Finance</option>
+            <option>Fiction</option>
+        </select>
+        <button onclick="addBook()">Add</button>
+    </div>
 
-<input type="text" id="search" placeholder="Search" onkeyup="searchBook()">
+    <!-- LIST -->
+    <div id="bookList" class="grid"></div>
 
-<ul id="bookList"></ul>
+    <!-- TRENDING -->
+    <h3>🔥 Trending</h3>
+    <div id="trendingList" class="grid"></div>
+
+</div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
