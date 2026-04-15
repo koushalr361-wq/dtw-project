@@ -1,74 +1,153 @@
 body {
-    margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    margin: 0;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     color: white;
 }
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
+/* LOGIN */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.bg-animation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, #38bdf8, transparent),
+                radial-gradient(circle at 80% 70%, #6366f1, transparent);
+    filter: blur(100px);
+    z-index: -1;
+}
+
+.glass-card {
+    background: rgba(255,255,255,0.05);
+    padding: 40px;
+    border-radius: 20px;
     text-align: center;
 }
 
-h1 {
-    font-weight: 700;
+/* HEADER */
+header {
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
 }
 
-input {
-    padding: 10px;
-    margin: 8px;
-    border-radius: 8px;
-    border: none;
-    width: 70%;
-}
-
+/* BUTTON */
 button {
-    padding: 10px 15px;
+    background: #38bdf8;
     border: none;
-    border-radius: 8px;
-    background: #ff9800;
-    color: white;
+    padding: 10px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 500;
 }
 
 button:hover {
-    background: #ffb74d;
+    background: #0ea5e9;
 }
 
-.welcome {
-    font-size: 18px;
-    margin-bottom: 10px;
+/* FORM */
+.top-bar {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
 }
 
-.book-list {
-    margin-top: 20px;
+input, select {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
 }
 
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* CARD */
 .card {
-    background: white;
-    color: black;
+    background: rgba(255,255,255,0.05);
     padding: 15px;
-    margin: 10px 0;
-    border-radius: 12px;
+    border-radius: 15px;
+    text-align: center;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 0 20px #38bdf8;
+}
+
+@keyframes popIn {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+/* ACTIONS */
+.actions {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
-.delete-btn {
-    background: red;
+/* STATS */
+.stats {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
 }
 
-.request-btn {
-    background: green;
-    margin-right: 5px;
+.stat-box {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
 }
 
-@media (max-width: 600px) {
-    input {
-        width: 90%;
-    }
+/* FILTER */
+.filters {
+    padding: 10px;
+}
+/* LIGHT MODE */
+.light {
+    background: #f1f5f9;
+    color: black;
+}
+
+.light .card,
+.light .stat-box,
+.light header {
+    background: #ffffff;
+    color: black;
+}
+body {
+    transition: opacity 0.4s ease;
+}
+.card h3 {
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+.card p {
+    margin: 0;
+    font-size: 14px;
 }
