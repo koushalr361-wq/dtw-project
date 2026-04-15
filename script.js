@@ -1,73 +1,160 @@
-function login() {
-    let user = document.getElementById("username").value;
-    if(user){
-        localStorage.setItem("user", user);
-        window.location.href = "dashboard.html";
-    }
+const clickSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+// DEFAULT BOOKS
+if(!localStorage.getItem("books")) {
+    let defaultBooks = [
+        {
+            name: "Atomic Habits",
+            img: "https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg",
+            category: "Self Help",
+            rating: 5,
+            liked: false
+        },
+        {
+            name: "Rich Dad Poor Dad",
+            img: "https://images-na.ssl-images-amazon.com/images/I/81bsw6fnUiL.jpg",
+            category: "Finance",
+            rating: 4,
+            liked: false
+        },
+        {
+            name: "The Alchemist",
+            img: "https://images-na.ssl-images-amazon.com/images/I/71aFt4+OTOL.jpg",
+            category: "Fiction",
+            rating: 5,
+            liked: false
+        }
+    ];
+
+    localStorage.setItem("books", JSON.stringify(defaultBooks));
 }
 
+function login() {
+    document.body.style.opacity = 0;
+    setTimeout(() => {
+        window.location.href = "dashboard.html";
+    }, 400);
+}
 function logout() {
     localStorage.removeItem("user");
     window.location.href = "index.html";
 }
 
 function addBook() {
-    let book = document.getElementById("bookName").value;
-    let books = JSON.parse(localStorage.getItem("books")) || [];
+    let name = document.getElementById("bookName").value;
+    let img = document.getElementById("bookImg").value;
+    let category = document.getElementById("category").value;
 
-    books.push(book);
+    let books = JSON.parse(localStorage.getItem("books"));
+    books.push({name, img, category, rating: 0, liked: false});
     localStorage.setItem("books", JSON.stringify(books));
+    clickSound.play();
 
     displayBooks();
 }
 
 function displayBooks() {
-    let books = JSON.parse(localStorage.getItem("books")) || [];
+    let books = JSON.parse(localStorage.getItem("books"));
     let list = document.getElementById("bookList");
-
-    if(!list) return;
 
     list.innerHTML = "";
 
-    books.forEach((b, index) => {
+    books.forEach((b, i) => {
         list.innerHTML += `
-            <li>
-                ${b}
-                <button onclick="requestBook('${b}')">Request</button>
-                <button onclick="deleteBook(${index})">Delete</button>
-            </li>
+        <div class="card">
+            <img src="${b.img}">
+            <h3>${b.name}</h3>
+            <p>${b.category}</p>
+            <p>⭐ ${b.rating}</p>
+
+            <div class="actions">
+                <button onclick="rate(${i})">⭐</button>
+                <button onclick="like(${i})">${b.liked ? '❤️' : '🤍'}</button>
+                <button onclick="deleteBook(${i})">🗑️</button>
+            </div>
+        </div>
         `;
     });
+
+    updateStats();
 }
 
-function deleteBook(index) {
+function rate(i) {
     let books = JSON.parse(localStorage.getItem("books"));
-    books.splice(index, 1);
+    books[i].rating++;
     localStorage.setItem("books", JSON.stringify(books));
     displayBooks();
 }
 
-function searchBook() {
-    let input = document.getElementById("search").value.toLowerCase();
-    let items = document.querySelectorAll("#bookList li");
+function like(i) {
+    let books = JSON.parse(localStorage.getItem("books"));
+    books[i].liked = !books[i].liked;
+    localStorage.setItem("books", JSON.stringify(books));
+    displayBooks();
+    clickSound.play();
+}
 
-    items.forEach(item => {
-        item.style.display = item.innerText.toLowerCase().includes(input) ? "" : "none";
+function deleteBook(i) {
+    let books = JSON.parse(localStorage.getItem("books"));
+    books.splice(i, 1);
+    localStorage.setItem("books", JSON.stringify(books));
+    displayBooks();
+    clickSound.play();
+}
+
+function updateStats() {
+    let books = JSON.parse(localStorage.getItem("books"));
+
+    document.getElementById("totalBooks").innerText = books.length;
+    document.getElementById("likedBooks").innerText =
+        books.filter(b => b.liked).length;
+
+    let categories = {};
+    books.forEach(b => {
+        categories[b.category] = (categories[b.category] || 0) + 1;
     });
-}
 
-function requestBook(book) {
-    localStorage.setItem("currentBook", book);
-    window.location.href = "chat.html";
-}
+    let top = Object.keys(categories).reduce((a,b)=>
+        categories[a] > categories[b] ? a : b, "-");
 
-function sendMessage() {
-    let msg = document.getElementById("message").value;
-    let chat = document.getElementById("chatBox");
-
-    chat.innerHTML += `<p>${msg}</p>`;
+    document.getElementById("topCategory").innerText = top;
 }
 
 if(window.location.pathname.includes("dashboard.html")) {
     displayBooks();
+}
+// LOADER + TYPING EFFECT
+window.addEventListener("load", () => {
+    let loader = document.getElementById("loader");
+    let card = document.querySelector(".glass-card");
+
+    if(loader) loader.style.display = "none";
+
+    if(card){
+        card.classList.remove("hidden");
+        card.classList.add("show");
+    }
+
+    typeEffect();
+});
+
+// TYPING TEXT
+function typeEffect() {
+    let el = document.getElementById("typing");
+    if(!el) return;
+
+    let text = "Book Exchange";
+    let i = 0;
+
+    function typing() {
+        if(i < text.length) {
+            el.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, 70);
+        }
+    }
+
+    typing();
+}
+function toggleTheme() {
+    document.body.classList.toggle("light");
 }
